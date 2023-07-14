@@ -99,10 +99,47 @@ public class ProdutosDAO {
         }
         
     }
+    
+    public List<ProdutosDTO> listarProdutosVendidos() {
+
+    List<ProdutosDTO> produtosVendidos = new ArrayList<>();
+
+    try {
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            ProdutosDTO produtoDTO = new ProdutosDTO();
+            produtoDTO.setId(rs.getInt("id"));
+            produtoDTO.setNome(rs.getString("nome"));
+            produtoDTO.setValor(rs.getInt("valor"));
+            produtosVendidos.add(produtoDTO);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return produtosVendidos;
+}
+    
+    
+    public void venderProduto(int produtoId) {
+    try {
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, produtoId);
+        stmt.executeUpdate();
+        System.out.println("Produto vendido com sucesso.");
+    } catch (SQLException e) {
+        System.err.println("Erro ao vender o produto: " + e.getMessage());
+    }
+
+}
 
     ArrayList<ProdutosDTO> listarProdutos() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+ 
     
     
     
